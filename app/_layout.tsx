@@ -1,3 +1,5 @@
+import { AppProviders } from '@/src/core';
+import { useAppStore } from '@/src/shared';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 
@@ -9,12 +11,19 @@ export default function RootLayout() {
         'sora-semibold': require('@/assets/fonts/Sora-SemiBold.ttf'),
         'sora-bold': require('@/assets/fonts/Sora-Bold.ttf'),
     });
+    const { isOnboardingCompleted } = useAppStore();
+
 
     if (!isLoaded) return null;
 
     return (
-        <Stack>
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-        </Stack>
+        <AppProviders>
+            <Stack>
+                <Stack.Screen name='onboarding' options={{ headerShown: false }} />
+                <Stack.Protected guard={isOnboardingCompleted}>
+                    <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+                </Stack.Protected>
+            </Stack>
+        </AppProviders>
     );
 }
