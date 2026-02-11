@@ -2,9 +2,13 @@ import { AppProviders } from '@/src/core';
 import { useAppStore } from '@/src/shared';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-    const [isLoaded] = useFonts({
+    const [isLoaded, error] = useFonts({
         'sora-light': require('@/assets/fonts/Sora-Light.ttf'),
         'sora-regular': require('@/assets/fonts/Sora-Regular.ttf'),
         'sora-medium': require('@/assets/fonts/Sora-Medium.ttf'),
@@ -13,8 +17,13 @@ export default function RootLayout() {
     });
     const { isOnboardingCompleted } = useAppStore();
 
+    useEffect(() => {
+        if (isLoaded || error) {
+            SplashScreen.hideAsync();
+        }
+    }, [isLoaded, error]);
 
-    if (!isLoaded) return null;
+    if (!isLoaded && !error) return null;
 
     return (
         <AppProviders>
