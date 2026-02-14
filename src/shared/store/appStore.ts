@@ -1,4 +1,12 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
+import * as SecureStore from 'expo-secure-store';
+
+const secureStorage: StateStorage = {
+    getItem: (key) => SecureStore.getItemAsync(key),
+    setItem: (key, value) => SecureStore.setItemAsync(key, value),
+    removeItem: (key) => SecureStore.deleteItemAsync(key),
+};
 
 type AppState = {
     isOnboardingCompleted: boolean;
@@ -13,10 +21,18 @@ type AppActions = {
     reset: () => void;
 }
 
-export const useAppStore = create<AppState & AppActions>((set) => ({
-    ...initialState,
+export const useAppStore = create<AppState & AppActions>()(
+    persist(
+        (set) => ({
+            ...initialState,
 
-    setIsOnboardingCompleted: (isOnboardingCompleted: boolean) => set({ isOnboardingCompleted }),
+            setIsOnboardingCompleted: (isOnboardingCompleted: boolean) => set({ isOnboardingCompleted }),
 
-    reset: () => set(initialState)
-}));
+            reset: () => set(initialState),
+        }),
+        {
+            name: 'app-store',
+            storage: createJSONStorage(() => secureStorage),
+        }
+    )
+);

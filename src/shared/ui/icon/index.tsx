@@ -1,6 +1,6 @@
 import iconSet from '@/assets/selection.json';
 import IcoMoon from 'react-icomoon';
-import { Svg, Path } from 'react-native-svg';
+import { Path, Svg } from 'react-native-svg';
 
 type IconName = (typeof iconSet.icons)[number]['icon']['tags'][number];
 
@@ -10,7 +10,7 @@ type TIconProps = {
     color?: string;
 };
 
-const Icon = ({ icon, size = 24, color = '#000' }: TIconProps) => {
+export const Icon = ({ icon, size = 24, color = '#000' }: TIconProps) => {
     return (
         <IcoMoon
             native
@@ -24,4 +24,3 @@ const Icon = ({ icon, size = 24, color = '#000' }: TIconProps) => {
     );
 };
 
-export { Icon };
