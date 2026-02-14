@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import * as SecureStore from 'expo-secure-store';
+import { create } from 'zustand';
+import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
 
 const secureStorage: StateStorage = {
     getItem: (key) => SecureStore.getItemAsync(key),
